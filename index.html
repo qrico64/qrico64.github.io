@@ -2,8 +2,16 @@
 <html>
     <head>
         <title>Hello World!</title>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
     <body>
         <p id="test">Helloo</p>
+        <script>
+            $(function() {
+                $("#test").mouseenter(function() {
+                    $(this).css("background-color", "#8888CC");
+                });
+            });
+        </script>
     </body>
 </html>
