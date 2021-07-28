@@ -28,6 +28,18 @@
     let contrast = 1;
 </script>
 <script>
+    let dict = window.location.search.substring(1).split('&');
+    for (let i = 0; i < dict.length; ++i) {
+        let dictelem = dict[i].split('=');
+        if (dictelem[0] === "cellwidth") {
+            xcell = parseInt(dictelem[1]);
+        } else if (dictelem[0] === "cellheight") {
+            ycell = parseInt(dictelem[1]);
+        } else if (dictelem[0] === "contrast") {
+            contrast = parseInt(dictelem[1]);
+        }
+    }
+    
     function run() {
         if (txl % num_board !== 0) {
             document.body.innerHTML = "";
@@ -176,7 +188,7 @@
             canvi4.style.left = (num_board * cl - offset) + "px";
         }
 
-        let k = setInterval(animate, 20);
+        let k = setInterval(animate, 25);
         // console.log(k);
     }
     run();
