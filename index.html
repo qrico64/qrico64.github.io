@@ -1,18 +1,185 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Hello World!</title>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    </head>
-    <body>
-        <p id="test">Helloo</p>
-        <iframe src="https://www.google.com/"></iframe>
-        <script>
-            $(function() {
-                $("#test").mouseenter(function() {
-                    $(this).css("background-color", "#8888CC");
-                });
-            });
-        </script>
-    </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>perlinv2.html</title>
+    <style>
+        body {
+            overflow: hidden;
+        }
+        canvas.canvi {
+            position: absolute;
+            top: 0;
+        }
+        code.error-message {
+            position: relative;
+            place-self: center;
+            margin: auto;
+            font-size: 50px;
+        }
+    </style>
+</head>
+<body style="display:grid;">
+<script>
+    // Controls
+    let num_board = 4;
+    let txl = window.innerWidth, tyl = window.innerHeight;
+    let xcell = 100, ycell = 100;
+    let contrast = 1;
+</script>
+<script>
+    function run() {
+        if (txl % num_board !== 0) {
+            document.body.innerHTML = "";
+            let emes = document.createElement("code");
+            emes.className = "error-message";
+            emes.style.top = (tyl / 2 - 50) + "px";
+            document.body.appendChild(emes);
+            let message = "WARNING: " + txl + " % " + num_board + " = " + (txl % num_board) + "";
+            for (let i = 0; i < message.length; ++i) {
+                setTimeout(function() {emes.innerHTML += message[i];}, i * 50 + 50);
+            }
+            return;
+        }
+
+        // Initialize boards objects
+        let cl = Math.floor(txl / num_board); // txl = 1280, num_board = 4
+        let canvi = Array(num_board), pens = Array(num_board);
+        for (let i = 0; i < num_board; ++i) {
+            canvi[i] = document.createElement("canvas");
+            canvi[i].className = "canvi";
+            canvi[i].width = cl;
+            canvi[i].height = tyl;
+            canvi[i].style.left = (i * cl) + "px";
+            pens[i] = canvi[i].getContext("2d");
+            document.body.appendChild(canvi[i]);
+        }
+        let bxl = Math.floor(txl / xcell) + 4, byl = Math.floor(tyl / ycell) + 2;
+
+        // Perlin noise functions
+        function gradg() {
+            let a = Math.random() * 2 - 1, b = Math.random() * 2 - 1;
+            let factor = contrast / Math.sqrt(a * a + b * b);
+            return [a * factor, b * factor];
+        }
+
+        function lerp(l, r, i) {
+            return l + (r - l) * i;
+        }
+
+        function dot(grad, dx, dy) {
+            return grad[0] * dx + grad[1] * dy;
+        }
+
+        function fade(t) {
+            return t * t * t * (t * (t * 6 - 15) + 10);
+        }
+
+        function perlin(grad1, grad2, grad3, grad4, x, y) {
+            let a = lerp(dot(grad1, x, y), dot(grad2, x - 1, y), fade(x));
+            let b = lerp(dot(grad3, x, y - 1), dot(grad4, x - 1, y - 1), fade(x));
+            return lerp(a, b, fade(y));
+        }
+
+        // Initialize gradient vectors
+        let grads = Array(bxl);
+        for (let x = 0; x < bxl; ++x) {
+            grads[x] = Array(byl);
+            for (let y = 0; y < byl; ++y) {
+                grads[x][y] = gradg();
+            }
+        }
+
+        // Initialize board 4
+        let canvi4 = document.createElement("canvas");
+        canvi4.className = "canvi";
+        canvi4.width = cl;
+        canvi4.height = tyl;
+        canvi4.style.left = (num_board * cl) + "px";
+        let pen4 = canvi4.getContext("2d");
+        document.body.appendChild(canvi4);
+
+        // Initialize board content
+        for (let x = 0; x <= txl; ++x) {
+            for (let y = 0; y < tyl; ++y) {
+                let bx = Math.floor(x / xcell), by = Math.floor(y / ycell);
+                let color = perlin(grads[bx][by], grads[bx + 1][by], grads[bx][by + 1], grads[bx + 1][by + 1], (x % xcell) / xcell, (y % ycell) / ycell);
+                color = Math.floor(color * 128 + 128);
+                let cx = Math.floor(x / cl);
+                // console.log(pens[cx]);
+                if (cx >= num_board) {
+                    pen4.fillStyle = "rgb(0, 0, " + color + ")";
+                    pen4.fillRect(x % cl, y, 1, 1);
+                } else {
+                    pens[cx].fillStyle = "rgb(0, 0, " + color + ")";
+                    pens[cx].fillRect(x % cl, y, 1, 1);
+                }
+            }
+        }
+
+        // function post(arr) {
+        //     return "[" + Math.floor(arr[0] * 100) / 100 + ", " + Math.floor(arr[1] * 100) / 100 + "]";
+        // }
+
+        let boffset = 0, offset = 0;
+
+        function animate() {
+            boffset++;
+            offset++;
+
+            if (boffset >= xcell) {
+                // console.log("called shift boffset");
+                boffset -= xcell;
+                for (let i = 0; i < bxl - 1; ++i) {
+                    grads[i] = Array(byl);
+                    for (let y = 0; y < byl; ++y) {
+                        grads[i][y] = [grads[i + 1][y][0], grads[i + 1][y][1]];
+                    }
+                }
+                for (let i = 0; i < byl; ++i) {
+                    grads[bxl - 1][i] = gradg();
+                }
+            }
+
+            if (offset >= cl) {
+                // console.log("called shift offset");
+                offset -= cl;
+                canvi[0].remove();
+                for (let i = 0; i < num_board - 1; ++i) {
+                    canvi[i] = canvi[i + 1];
+                    pens[i] = pens[i + 1];
+                }
+                canvi[num_board - 1] = canvi4;
+                pens[num_board - 1] = pen4;
+                canvi4 = document.createElement("canvas");
+                canvi4.className = "canvi";
+                canvi4.width = cl;
+                canvi4.height = tyl;
+                canvi4.style.left = (num_board * cl) + "px";
+                pen4 = canvi4.getContext("2d");
+                document.body.appendChild(canvi4);
+            }
+
+            let bx = Math.floor((txl + boffset) / xcell);
+            // console.log(bx.toString() + " : " + post(grads[bx][0]) + " ; " + post(grads[bx+1][0]) + " ; " + post(grads[bx+2][0]));
+            for (let y = 0; y < tyl; ++y) {
+                let by = Math.floor(y / ycell);
+                let color = perlin(grads[bx][by], grads[bx + 1][by], grads[bx][by + 1], grads[bx + 1][by + 1], ((txl + boffset) % xcell) / xcell, (y % ycell) / ycell);
+                color = Math.floor(color * 128 + 128);
+                pen4.fillStyle = "rgb(0, 0, " + color + ")"
+                pen4.fillRect(offset, y, 1, 1);
+            }
+
+            for (let i = 0; i < num_board; ++i) {
+                canvi[i].style.left = (i * cl - offset) + "px";
+            }
+            canvi4.style.left = (num_board * cl - offset) + "px";
+        }
+
+        let k = setInterval(animate, 20);
+        // console.log(k);
+    }
+    run();
+</script>
+</body>
 </html>
