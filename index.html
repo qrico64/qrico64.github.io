@@ -91,7 +91,7 @@
 <div id="wrapper"></div>
 <script>
     // Controls
-    let num_board = 4;
+    let num_board = 1;
     let txl = window.innerWidth, tyl = window.innerHeight;
     let xcell = 100, ycell = 100;
     let contrast = 100;
@@ -130,165 +130,153 @@
         }
     }
 
-    // If screen size are changed, throw error
-    if (txl % num_board !== 0) {
-        document.body.innerHTML = "";
-        let emes = document.createElement("code");
-        emes.className = "error-message";
-        emes.style.top = (tyl / 2 - 50) + "px";
-        document.body.appendChild(emes);
-        let message = "WARNING: " + txl + " % " + num_board + " = " + (txl % num_board) + "";
-        for (let i = 0; i < message.length; ++i) {
-            setTimeout(function() {emes.innerHTML += message[i];}, i * 50 + 50);
-        }
-    } else {
-        // Initialize boards objects
-        let cl = Math.floor(txl / num_board);
-        let canvi = Array(num_board), pens = Array(num_board);
-        for (let i = 0; i < num_board; ++i) {
-            canvi[i] = document.createElement("canvas");
-            canvi[i].className = "canvi";
-            canvi[i].width = cl;
-            canvi[i].height = tyl;
-            canvi[i].style.left = (i * cl) + "px";
-            pens[i] = canvi[i].getContext("2d");
-            document.getElementById("wrapper").appendChild(canvi[i]);
-        }
-        let bxl = Math.floor(txl / xcell) + 4, byl = Math.floor(tyl / ycell) + 2;
 
-        // Perlin noise functions
-        function gradg() {
-            let a = Math.random() * 2 - 1, b = Math.random() * 2 - 1;
-            let factor = (contrast / 100) / Math.sqrt(a * a + b * b);
-            return [a * factor, b * factor];
-        }
-
-        function lerp(l, r, i) {
-            return l + (r - l) * i;
-        }
-
-        function dot(grad, dx, dy) {
-            return grad[0] * dx + grad[1] * dy;
-        }
-
-        function fade(t) {
-            return t * t * t * (t * (t * 6 - 15) + 10);
-        }
-
-        function perlin(grad1, grad2, grad3, grad4, x, y) {
-            let a = lerp(dot(grad1, x, y), dot(grad2, x - 1, y), fade(x));
-            let b = lerp(dot(grad3, x, y - 1), dot(grad4, x - 1, y - 1), fade(x));
-            return lerp(a, b, fade(y));
-        }
-
-        function colorg(base) {
-            base = (base + 1) / 2;
-            let r = Math.floor(lerp(r1, r2, base)), b = Math.floor(lerp(b1, b2, base)), g = Math.floor(lerp(g1, g2, base));
-            return "rgb(" + r + ", " + g + ", " + b + ")";
-        }
-
-        function zfill(s, len) {
-            while (s.length < len) {
-                s = "0" + s;
-            }
-            return s;
-        }
-
-        // Initialize gradient vectors
-        let grads = Array(bxl);
-        for (let x = 0; x < bxl; ++x) {
-            grads[x] = Array(byl);
-            for (let y = 0; y < byl; ++y) {
-                grads[x][y] = gradg();
-            }
-        }
-
-        // Initialize "board 4", the oncoming board
-        let canvi4 = document.createElement("canvas");
-        canvi4.className = "canvi";
-        canvi4.width = cl;
-        canvi4.height = tyl;
-        canvi4.style.left = (num_board * cl) + "px";
-        let pen4 = canvi4.getContext("2d");
-        document.getElementById("wrapper").appendChild(canvi4);
-
-        // Initialize board content
-        for (let x = 0; x <= txl; ++x) {
-            for (let y = 0; y < tyl; ++y) {
-                let bx = Math.floor(x / xcell), by = Math.floor(y / ycell);
-                let color = perlin(grads[bx][by], grads[bx + 1][by], grads[bx][by + 1], grads[bx + 1][by + 1], (x % xcell) / xcell, (y % ycell) / ycell);
-                let rgb = colorg(color);
-                let cx = Math.floor(x / cl);
-                // console.log(pens[cx]);
-                if (cx >= num_board) {
-                    pen4.fillStyle = rgb;
-                    pen4.fillRect(x % cl, y, 1, 1);
-                } else {
-                    pens[cx].fillStyle = rgb;
-                    pens[cx].fillRect(x % cl, y, 1, 1);
-                }
-            }
-        }
-
-        // Animation function & parameters
-        let boffset = 0, offset = 0;
-        function animate() {
-            timeoutconst = setTimeout(animate, speed);
-
-            boffset++;
-            offset++;
-
-            // Shift blocks & switch blocks if needed
-            if (boffset >= xcell) {
-                boffset -= xcell;
-                for (let i = 0; i < bxl - 1; ++i) {
-                    grads[i] = Array(byl);
-                    for (let y = 0; y < byl; ++y) {
-                        grads[i][y] = [grads[i + 1][y][0], grads[i + 1][y][1]];
-                    }
-                }
-                for (let i = 0; i < byl; ++i) {
-                    grads[bxl - 1][i] = gradg();
-                }
-            }
-
-            // Switch boards if needed
-            if (offset >= cl) {
-                offset -= cl;
-                canvi[0].remove();
-                for (let i = 0; i < num_board - 1; ++i) {
-                    canvi[i] = canvi[i + 1];
-                    pens[i] = pens[i + 1];
-                }
-                canvi[num_board - 1] = canvi4;
-                pens[num_board - 1] = pen4;
-                canvi4 = document.createElement("canvas");
-                canvi4.className = "canvi";
-                canvi4.width = cl;
-                canvi4.height = tyl;
-                canvi4.style.left = (num_board * cl) + "px";
-                pen4 = canvi4.getContext("2d");
-                document.getElementById("wrapper").appendChild(canvi4);
-            }
-
-            // Fill new column of colors in board 4
-            let bx = Math.floor((txl + boffset) / xcell);
-            for (let y = 0; y < tyl; ++y) {
-                let by = Math.floor(y / ycell);
-                let color = perlin(grads[bx][by], grads[bx + 1][by], grads[bx][by + 1], grads[bx + 1][by + 1], ((txl + boffset) % xcell) / xcell, (y % ycell) / ycell);
-                let rgb = colorg(color);
-                pen4.fillStyle = rgb;
-                pen4.fillRect(offset, y, 1, 1);
-            }
-
-            // Shift boards
-            for (let i = 0; i < num_board; ++i) {
-                canvi[i].style.left = (i * cl - offset) + "px";
-            }
-            canvi4.style.left = (num_board * cl - offset) + "px";
-        }
-        animate();
+    // Initialize boards objects
+    let cl = Math.floor(txl / num_board);
+    let canvi = Array(num_board), pens = Array(num_board);
+    for (let i = 0; i < num_board; ++i) {
+        canvi[i] = document.createElement("canvas");
+        canvi[i].className = "canvi";
+        canvi[i].width = cl;
+        canvi[i].height = tyl;
+        canvi[i].style.left = (i * cl) + "px";
+        pens[i] = canvi[i].getContext("2d");
+        document.getElementById("wrapper").appendChild(canvi[i]);
     }
+    let bxl = Math.floor(txl / xcell) + 4, byl = Math.floor(tyl / ycell) + 2;
+
+    // Perlin noise functions
+    function gradg() {
+        let a = Math.random() * 2 - 1, b = Math.random() * 2 - 1;
+        let factor = (contrast / 100) / Math.sqrt(a * a + b * b);
+        return [a * factor, b * factor];
+    }
+
+    function lerp(l, r, i) {
+        return l + (r - l) * i;
+    }
+
+    function dot(grad, dx, dy) {
+        return grad[0] * dx + grad[1] * dy;
+    }
+
+    function fade(t) {
+        return t * t * t * (t * (t * 6 - 15) + 10);
+    }
+
+    function perlin(grad1, grad2, grad3, grad4, x, y) {
+        let a = lerp(dot(grad1, x, y), dot(grad2, x - 1, y), fade(x));
+        let b = lerp(dot(grad3, x, y - 1), dot(grad4, x - 1, y - 1), fade(x));
+        return lerp(a, b, fade(y));
+    }
+
+    function colorg(base) {
+        base = (base + 1) / 2;
+        let r = Math.floor(lerp(r1, r2, base)), b = Math.floor(lerp(b1, b2, base)), g = Math.floor(lerp(g1, g2, base));
+        return "rgb(" + r + ", " + g + ", " + b + ")";
+    }
+
+    function zfill(s, len) {
+        while (s.length < len) {
+            s = "0" + s;
+        }
+        return s;
+    }
+
+    // Initialize gradient vectors
+    let grads = Array(bxl);
+    for (let x = 0; x < bxl; ++x) {
+        grads[x] = Array(byl);
+        for (let y = 0; y < byl; ++y) {
+            grads[x][y] = gradg();
+        }
+    }
+
+    // Initialize "board 4", the oncoming board
+    let canvi4 = document.createElement("canvas");
+    canvi4.className = "canvi";
+    canvi4.width = cl;
+    canvi4.height = tyl;
+    canvi4.style.left = (num_board * cl) + "px";
+    let pen4 = canvi4.getContext("2d");
+    document.getElementById("wrapper").appendChild(canvi4);
+
+    // Initialize board content
+    for (let x = 0; x <= txl; ++x) {
+        for (let y = 0; y < tyl; ++y) {
+            let bx = Math.floor(x / xcell), by = Math.floor(y / ycell);
+            let color = perlin(grads[bx][by], grads[bx + 1][by], grads[bx][by + 1], grads[bx + 1][by + 1], (x % xcell) / xcell, (y % ycell) / ycell);
+            let rgb = colorg(color);
+            let cx = Math.floor(x / cl);
+            // console.log(pens[cx]);
+            if (cx >= num_board) {
+                pen4.fillStyle = rgb;
+                pen4.fillRect(x % cl, y, 1, 1);
+            } else {
+                pens[cx].fillStyle = rgb;
+                pens[cx].fillRect(x % cl, y, 1, 1);
+            }
+        }
+    }
+
+    // Animation function & parameters
+    let boffset = 0, offset = 0;
+    function animate() {
+        timeoutconst = setTimeout(animate, speed);
+
+        boffset++;
+        offset++;
+
+        // Shift blocks & switch blocks if needed
+        if (boffset >= xcell) {
+            boffset -= xcell;
+            for (let i = 0; i < bxl - 1; ++i) {
+                grads[i] = Array(byl);
+                for (let y = 0; y < byl; ++y) {
+                    grads[i][y] = [grads[i + 1][y][0], grads[i + 1][y][1]];
+                }
+            }
+            for (let i = 0; i < byl; ++i) {
+                grads[bxl - 1][i] = gradg();
+            }
+        }
+
+        // Switch boards if needed
+        if (offset >= cl) {
+            offset -= cl;
+            canvi[0].remove();
+            for (let i = 0; i < num_board - 1; ++i) {
+                canvi[i] = canvi[i + 1];
+                pens[i] = pens[i + 1];
+            }
+            canvi[num_board - 1] = canvi4;
+            pens[num_board - 1] = pen4;
+            canvi4 = document.createElement("canvas");
+            canvi4.className = "canvi";
+            canvi4.width = cl;
+            canvi4.height = tyl;
+            canvi4.style.left = (num_board * cl) + "px";
+            pen4 = canvi4.getContext("2d");
+            document.getElementById("wrapper").appendChild(canvi4);
+        }
+
+        // Fill new column of colors in board 4
+        let bx = Math.floor((txl + boffset) / xcell);
+        for (let y = 0; y < tyl; ++y) {
+            let by = Math.floor(y / ycell);
+            let color = perlin(grads[bx][by], grads[bx + 1][by], grads[bx][by + 1], grads[bx + 1][by + 1], ((txl + boffset) % xcell) / xcell, (y % ycell) / ycell);
+            let rgb = colorg(color);
+            pen4.fillStyle = rgb;
+            pen4.fillRect(offset, y, 1, 1);
+        }
+
+        // Shift boards
+        for (let i = 0; i < num_board; ++i) {
+            canvi[i].style.left = (i * cl - offset) + "px";
+        }
+        canvi4.style.left = (num_board * cl - offset) + "px";
+    }
+    animate();
 </script>
 
 <script>
@@ -372,7 +360,7 @@
     <div id="control-board-1">
         <label for="speed-control" id="speed-control-label">Speed = 40</label>
         <br>
-        <input type="range" min="1" max="50" id="speed-control" value="40" oninput="speedchange(this.value);">
+        <input type="range" min="1" max="100" id="speed-control" value="40" oninput="speedchange(this.value);">
         <input type="button" id="pause-control" value="Pause" onclick="pause();">
     </div>
     <div id="control-board-2">
@@ -381,7 +369,7 @@
             <input type="text" id="color1-control" class="num-control" value="000000">
         </label>
         <label id="color2-control-label" class="num-control-label">
-            Color 1:
+            Color 2:
             <input type="text" id="color2-control" class="num-control" value="0000ff">
         </label>
         <label id="cellwidth-control-label" class="num-control-label">
