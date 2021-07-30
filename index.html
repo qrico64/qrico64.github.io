@@ -397,6 +397,10 @@
     document.getElementById("contrast-control").value = contrast;
     document.getElementById("control-board-1").style.opacity = Math.floor(lerp(16, 99, Math.log(contrast) / Math.log(contrast_max))) + "%";
     document.getElementById("control-board-2").style.opacity = Math.floor(lerp(16, 99, Math.log(contrast) / Math.log(contrast_max))) + "%";
+    document.getElementById("cellwidth-control").min = xcell_min;
+    document.getElementById("cellwidth-control").max = xcell_max;
+    document.getElementById("cellheight-control").min = ycell_min;
+    document.getElementById("cellheight-control").max = ycell_max;
 </script>
 </body>
 </html>
