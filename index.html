@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- EDIT: your name and a short description for search results. -->
+    <title>Rico Qi · Personal Website</title>
+    <meta name="description" content="Rico Qi — master's student researching machine learning and robotics. Papers, robot demos, and experience.">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css?v=paper-title-hover">
+    <script src="script.js?v=paper-preview-pdf" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <div class="site">
+      <!-- EDIT: INTRODUCTION. Keep this short; the Timeline holds the details. -->
+      <header class="profile">
+        <div class="profile-copy">
+          <h1>Rico Qi</h1>
+          <p>
+            Hi! 👋 I'm a master's student in the BS/MS program of University of Washington,
+            studying Computer Science. I am advised by
+            <a href="https://scholar.google.com/citations?hl=en&user=1wLVDP4AAAAJ">Abhishek Gupta</a> as part of
+            <a href="https://weirdlab.cs.washington.edu/">WEIRD Lab</a>.
+            My research focuses on VLAs, Sim-to-Real, and Real-World RL.
+          </p>
+          <p>
+            I joined Prof. Abhishek's lab in Jan 2025, where I worked with
+            <a href="https://sriya.sh/">Sriyash Poddar</a> on efficient learning from human interventions.
+            We improved existing real world RL algorithms by 10-50% in success rate and 30% in effort.
+            Then, I worked with <a href="https://arhanjain.github.io/">Arhan Jain</a> on post-training VLAs in simulation,
+            where we post-trained a base VLA (<a href="https://www.pi.website/blog/pi05">pi-0.5</a>) from 5% to 60% success rate without any real-world human demonstrations.
+          </p>
+          <p>
+            In Summer 2025, I was a modeling intern on the Tesla Foundation Models
+            team, where I worked on RL for model improvement; I trained a SOTA model that was deployed at the Robotaxi Launch (Austin).
+            I also competed at the ICPC World Finals twice.
+          </p>
+          <nav class="contact-links" aria-label="Contact and profiles">
+            <a href="mailto:qirico@cs.washington.edu">Email</a>
+            <a href="https://github.com/qrico64">GitHub</a>
+            <a href="https://www.linkedin.com/in/rico-qi-535b77203/">LinkedIn</a>
+            <a href="https://scholar.google.com/citations?user=6Ixm_pwAAAAJ&hl=en">Google Scholar</a>
+            <a href="https://x.com/rico_qi6779">Twitter</a>
+            <a href="assets/documents/resume.pdf">Resume</a>
+          </nav>
+        </div>
+        <figure class="portrait">
+          <!-- EDIT: replace src and alt with your own portrait. -->
+          <img src="assets/images/portrait.jpeg" width="400" height="460" alt="Portrait placeholder; replace with your photograph">
+        </figure>
+      </header>
+
+      <main id="content" tabindex="-1">
+        <!-- Without JavaScript these remain ordinary links to visible sections. -->
+        <nav class="tabs" aria-label="Explore my work">
+          <a class="tab" id="tab-papers" href="#papers">Papers</a>
+          <a class="tab" id="tab-demos" href="#demos">Demos</a>
+          <a class="tab" id="tab-timeline" href="#timeline">Timeline</a>
+        </nav>
+
+        <!-- EDIT: PAPERS. Duplicate an entire article to add another paper. -->
+        <section id="papers" class="panel" aria-labelledby="papers-heading">
+          <div class="section-intro">
+            <h2 id="papers-heading">Papers</h2>
+          </div>
+          <div class="paper-list">
+            <article class="paper" id="paper-accepted">
+              <a class="paper-preview" href="assets/documents/q-oil.pdf" aria-label="Read Q-OIL: Optimistic Exploration in Learning from Human Interventions (PDF)">
+                <video class="paper-image" autoplay muted loop playsinline preload="metadata" width="640" height="360" aria-hidden="true" tabindex="-1">
+                  <source src="assets/videos/demo-1-1-cropped.mp4" type="video/mp4">
+                  Read the Q-OIL paper (PDF).
+                </video>
+              </a>
+              <div class="paper-copy">
+                <p class="paper-meta"><span class="status">Accepted</span><span>CoRL 2026</span></p>
+                <h3><a href="assets/documents/q-oil.pdf">Q-OIL: Optimistic Exploration in Learning from Human Interventions</a></h3>
+                <p class="authors">Pranav Teegavarapu, Sriyash Poddar, <strong>Rico Qi</strong>, Cleah Winston, Krisha Khandelwal, Natasha Jaques, Abhishek Gupta</p>
+                <p class="paper-summary">
+                  We design an RL algorithm that use interventions as optimism signals for exploration.
+                  Attains 10-50% higher success rate with 30% less interventions against SOTA baselines HIL-SERL and HG-DAgger, across real tasks and users.
+                </p>
+                <!-- Replace spans with links, or remove links you don't have.
+                     PDFs that should stay out of search need the hosting setup
+                     in docs/pdf-hosting.md, not just a local PDF link. -->
+                <div class="paper-links" aria-label="Accepted paper resources">
+                  <a href="assets/documents/q-oil.pdf">PDF</a>
+                  <a href="#demo-01">Demo <span aria-hidden="true">↗</span></a>
+                </div>
+              </div>
+            </article>
+            <article class="paper" id="paper-submitted">
+              <a class="paper-preview" href="assets/documents/vla-sim-improvement.pdf" aria-label="Read Improving Generalist Policies with Simulation Post-Training (PDF)">
+                <video class="paper-image" autoplay muted loop playsinline preload="metadata" width="640" height="360" aria-hidden="true" tabindex="-1">
+                  <source src="assets/videos/demo-2-1.mp4" type="video/mp4">
+                  Read Improving Generalist Policies with Simulation Post-Training (PDF).
+                </video>
+              </a>
+              <div class="paper-copy">
+                <!-- EDIT: confirm the exact venue/workshop and current status. -->
+                <p class="paper-meta"><span class="status status-pending">In submission</span><span>CoRL 2026, Sim2Real2Field</span></p>
+                <h3><a href="assets/documents/vla-sim-improvement.pdf">Improving Generalist Policies with Simulation Post-Training</a></h3>
+                <p class="authors">Arhan Jain*, <strong>Rico Qi*</strong>, Gavin Angeloff, Aykut Onol, Paarth Shah, Abhishek Gupta</p>
+                <p class="paper-summary">
+                  We design a VLA post-training pipeline that requires no human teleoperation effort, by leveraging simulation.
+                  We successfully improve <a href="https://www.pi.website/blog/pi05">pi-0.5</a> from 5% to 60% success rate on long-horizon precision tasks, beating baselines that require human demos.
+                </p>
+                <div class="paper-links" aria-label="Submitted paper resources">
+                  <a href="assets/documents/vla-sim-improvement.pdf">PDF</a>
+                  <a href="#demo-02">Demo <span aria-hidden="true">↗</span></a>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- EDIT: DEMOS. Update captions to describe each clip. -->
+        <section id="demos" class="panel" aria-labelledby="demos-heading">
+          <div class="section-intro">
+            <h2 id="demos-heading">Demos</h2>
+          </div>
+          <div class="demo-list">
+            <figure class="demo" id="demo-01">
+              <video controls playsinline preload="metadata" width="1280" height="720" aria-label="Project one demo one" aria-describedby="demo-01-caption">
+                <source src="assets/videos/demo-1-1.mp4" type="video/mp4">
+                <p>Your browser cannot play this video. <a href="assets/videos/demo-1-1.mp4">Download the clip.</a></p>
+              </video>
+              <figcaption id="demo-01-caption">
+                <div class="demo-heading"><h3>Q-OIL: Optimistic Exploration in Learning from Human Interventions / Pen-in-Bowl</h3></div>
+                <p>Our algorithm learns, with 95% success rate, to pick up a pen from a random location and place it into the bowl after 30 minutes of real-world RL with interventions from scratch.</p>
+              </figcaption>
+            </figure>
+            <figure class="demo" id="demo-01-2">
+              <video controls playsinline preload="metadata" width="1280" height="720" aria-label="Project one demo two" aria-describedby="demo-01-2-caption">
+                <source src="assets/videos/demo-1-2.mp4" type="video/mp4">
+                <p>Your browser cannot play this video. <a href="assets/videos/demo-1-2.mp4">Download the clip.</a></p>
+              </video>
+              <figcaption id="demo-01-2-caption">
+                <div class="demo-heading"><h3>Q-OIL: Optimistic Exploration in Learning from Human Interventions / Unbutton-Shirt</h3></div>
+                <p>Our algorithm learns, with 90% success rate, to unbutton a shirt in just 12 minutes of real-world RL with interventions from scratch.</p>
+              </figcaption>
+            </figure>
+            <figure class="demo" id="demo-02">
+              <video controls playsinline preload="metadata" width="1280" height="720" aria-label="Project two demo one" aria-describedby="demo-02-caption">
+                <source src="assets/videos/demo-2-1.mp4" type="video/mp4">
+                <p>Your browser cannot play this video. <a href="assets/videos/demo-2-1.mp4">Download the clip.</a></p>
+              </video>
+              <figcaption id="demo-02-caption">
+                <div class="demo-heading"><h3>Improving Generalist Policies with Simulation Post-Training / Hang-Mug</h3></div>
+                <p>
+                  On a task that's long-horizon, bimanual, and precise, our post-training method is able to improve a base VLA policy with 5% success rate (<a href="https://www.pi.website/blog/pi05">pi-0.5</a>) to 60% success rate in the real world, with zero human effort except environment scanning.
+                </p>
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <!-- EDIT: TIMELINE. Newest year first; update dates before publishing. -->
+        <section id="timeline" class="panel" aria-labelledby="timeline-heading">
+          <div class="section-intro">
+            <h2 id="timeline-heading">Timeline</h2>
+          </div>
+          <div class="timeline-year">
+            <h3>2026</h3>
+            <ol class="timeline-list">
+              <li><span class="timeline-date">Oct 2026</span><p>We submitted <a href="assets/documents/vla-sim-improvement.pdf">Improving Generalist Policies with Simulation Post-Training</a> to CoRL 2026 workshop <a href="https://sim2real2field-corl26.github.io/">Sim2Real2Field</a>.</p></li>
+              <li><span class="timeline-date">Sep 2026</span><p><a href="assets/documents/q-oil.pdf">Q-OIL: Optimistic Exploration in Learning from Human Interventions</a> is accepted into CoRL 2026!</p></li>
+              <li><span class="timeline-date">Sep 2026</span><p>I started my master's at University of Washington.</p></li>
+              <li><span class="timeline-date">Mar 2026</span><p>We got top 10 at <a href="https://icpc.global/regionals/finder/North-America-Championship-2026/standings">2026 ICPC North America</a>, qualified to worlds.</p></li>
+            </ol>
+          </div>
+          <div class="timeline-year">
+            <h3>2025</h3>
+            <ol class="timeline-list">
+              <li><span class="timeline-date">Nov 2025</span><p>I won <a href="https://pnw.na.icpc.global/scoreboard/2025/real_contest/index_D1.html">2025 ICPC PacNW Regionals</a> with <a href="https://www.linkedin.com/in/jiahe-lu31/">Jiahe</a> and <a href="https://www.linkedin.com/in/akram62/">Akram</a>!</p></li>
+              <li><span class="timeline-date">Jun 2025</span><p>My trained model made it onto the Austin Robotaxi Launch! (although only for 3 weeks)</p></li>
+              <li><span class="timeline-date">May 2025</span><p>I started my internship at Tesla FSD, working on model training.</p></li>
+              <li><span class="timeline-date">Jan 2025</span><p>I joined <a href="https://weirdlab.cs.washington.edu/">WEIRD Lab</a> under <a href="https://scholar.google.com/citations?hl=en&user=1wLVDP4AAAAJ">Abhishek Gupta</a>.</p></li>
+            </ol>
+          </div>
+          <div class="timeline-year">
+            <h3>Earlier</h3>
+            <ol class="timeline-list">
+              <li><span class="timeline-date">Sep 2024</span><p>I competed at the <a href="https://cphof.org/standings/icpc/2024">48th ICPC World Finals</a> with <a href="https://kaiyuanliu04.github.io/">Kai</a> and <a href="https://cphof.org/profile/codeforces:Evirir">Jun</a>.</p></li>
+              <li><span class="timeline-date">Sep 2022</span><p>I started my bachelor's at University of Washington.</p></li>
+            </ol>
+          </div>
+        </section>
+      </main>
+      <footer class="site-footer">
+        <span>© <span id="current-year">2026</span> Rico Qi</span>
+        <span>Website template based on <a href="https://kayke.xyz/">Liyiming Ke</a></span>
+      </footer>
+    </div>
+  </body>
+</html>

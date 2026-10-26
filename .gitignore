@@ -1,0 +1,14 @@
+.DS_Store
+__pycache__/
+*.pyc
+node_modules/
+.env
+.env.*
+*.vsix
+
+# Keep PDFs that need noindex on a separate host with HTTP header support.
+# See docs/pdf-hosting.md. Add a public resume explicitly when you're ready.
+assets/documents/papers/
+
+# Optional external PDF-host staging folder from docs/pdf-hosting.md.
+pdf-host/
