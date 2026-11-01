@@ -12,3 +12,6 @@ assets/documents/papers/
 
 # Optional external PDF-host staging folder from docs/pdf-hosting.md.
 pdf-host/
+
+# Other things that I happen to stored in this directory.
+assets/documents/materials
